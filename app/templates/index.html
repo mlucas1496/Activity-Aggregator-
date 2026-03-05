@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Stack &amp; Match</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Gradient bar -->
+    <div class="gradient-bar"></div>
+
+    <!-- Header -->
+    <header>
+        <h1>Activity Stack &amp; Match</h1>
+        <div class="subtitle">v6.7 &middot; Python/Flask &middot; FX via Bank of Canada API &middot; Open output in Excel</div>
+    </header>
+
+    <!-- Body: two columns -->
+    <div class="main-grid">
+        <!-- Left column: file uploads -->
+        <div class="left-col">
+            <h3>Input Files</h3>
+
+            <div class="drop-zone" id="drop-prev_week" data-key="prev_week">
+                <div class="drop-info">
+                    <div class="drop-label">Previous Week's Activity Aggregator</div>
+                    <div class="drop-filename"></div>
+                </div>
+                <div class="drop-icon">+</div>
+                <input type="file" accept=".xlsx,.xls" style="display:none">
+            </div>
+
+            <div class="drop-zone" id="drop-bank_statements" data-key="bank_statements">
+                <div class="drop-info">
+                    <div class="drop-label">Find Bank Statement Lines (Workday)</div>
+                    <div class="drop-filename"></div>
+                </div>
+                <div class="drop-icon">+</div>
+                <input type="file" accept=".xlsx,.xls" style="display:none">
+            </div>
+
+            <div class="drop-zone" id="drop-all_transactions" data-key="all_transactions">
+                <div class="drop-info">
+                    <div class="drop-label">All Transactions (Lukka CSV)</div>
+                    <div class="drop-filename"></div>
+                </div>
+                <div class="drop-icon">+</div>
+                <input type="file" accept=".csv" style="display:none">
+            </div>
+
+            <div class="drop-zone" id="drop-loan_report" data-key="loan_report">
+                <div class="drop-info">
+                    <div class="drop-label">LoanMasterReport (RCF CSV)</div>
+                    <div class="drop-filename"></div>
+                </div>
+                <div class="drop-icon">+</div>
+                <input type="file" accept=".csv" style="display:none">
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <strong>Instructions:</strong><br>
+                1. Upload all 4 files above<br>
+                2. Click "Run Pipeline" to process<br>
+                3. Download the output XLSX<br>
+                4. Open in Excel to review<br>
+                <span class="instructions-note">
+                    Static Mapping &amp; Search Strings are bundled in the app.
+                </span>
+            </div>
+
+            <!-- Run button -->
+            <button id="run-btn" class="run-btn" disabled>Run Pipeline</button>
+        </div>
+
+        <!-- Right column: steps + log -->
+        <div class="right-col">
+            <h3>Processing Steps</h3>
+            <div id="steps-container">
+                <div class="step" data-id="1">
+                    <div class="step-badge">1</div>
+                    <span>Parse &amp; Load All Inputs</span>
+                </div>
+                <div class="step" data-id="FX">
+                    <div class="step-badge">FX</div>
+                    <span>FX Rates (Bank of Canada API)</span>
+                </div>
+                <div class="step" data-id="2a">
+                    <div class="step-badge">2a</div>
+                    <span>Enrich Bank Statements (Workday)</span>
+                </div>
+                <div class="step" data-id="2b">
+                    <div class="step-badge">2b</div>
+                    <span>Enrich BTH Trade Log (Lukka)</span>
+                </div>
+                <div class="step" data-id="RCF">
+                    <div class="step-badge">RC</div>
+                    <span>Process RCF Loans (Airtable)</span>
+                </div>
+                <div class="step" data-id="3">
+                    <div class="step-badge">3</div>
+                    <span>Substring Matching + 13WCF Line Mapping</span>
+                </div>
+                <div class="step" data-id="4a">
+                    <div class="step-badge">4a</div>
+                    <span>Fuzzy Match (Workday vs Historicals)</span>
+                </div>
+                <div class="step" data-id="4b">
+                    <div class="step-badge">4b</div>
+                    <span>Lukka Rule-Based Matching</span>
+                </div>
+                <div class="step" data-id="4c">
+                    <div class="step-badge">4c</div>
+                    <span>AR/AP Vendor/Customer Matching</span>
+                </div>
+                <div class="step" data-id="5">
+                    <div class="step-badge">5</div>
+                    <span>Manual User Check + Output XLSX</span>
+                </div>
+            </div>
+
+            <!-- Stats summary (hidden until done) -->
+            <div id="stats-panel" class="stats-panel" style="display:none">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-green" id="stat-mapped">0</div>
+                    <div class="stat-label">Mapped</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-yellow" id="stat-notmapped">0</div>
+                    <div class="stat-label">Not Mapped</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-muted" id="stat-excluded">0</div>
+                    <div class="stat-label">Excluded</div>
+                </div>
+            </div>
+
+            <!-- Log panel -->
+            <div id="log-panel" class="log-panel">
+                <span class="log-placeholder">Pipeline log will appear here...</span>
+            </div>
+
+            <!-- Error box -->
+            <div id="error-box" class="error-box" style="display:none"></div>
+
+            <!-- Download button -->
+            <button id="download-btn" class="download-btn" style="display:none">Download Output</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; Bullish 2026 &middot; Activity Stack &amp; Match v6.7 &middot; Python/Flask Build
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
