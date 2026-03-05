@@ -1,7 +1,8 @@
 // Activity Stack & Match - Frontend JS
 (function () {
     const FILE_KEYS = [
-        "prev_week", "bank_statements", "all_transactions", "loan_report"
+        "prev_week", "bank_statements", "all_transactions", "loan_report",
+        "search_strings", "static_mapping"
     ];
     const files = {};
     let sessionId = null;

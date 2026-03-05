@@ -20,13 +20,8 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
-DATA_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-# Bundled mapping files (read automatically, not uploaded)
-SEARCH_STRINGS_PATH = os.path.join(DATA_DIR, "Search_Strings_V2.xlsx")
-STATIC_MAPPING_PATH = os.path.join(DATA_DIR, "Static_Mapping_5.02.xlsx")
 
 # In-memory session state
 sessions = {}
@@ -45,16 +40,13 @@ def upload():
     os.makedirs(session_dir, exist_ok=True)
 
     saved = {}
-    for key in ["prev_week", "bank_statements", "all_transactions", "loan_report"]:
+    for key in ["prev_week", "bank_statements", "all_transactions", "loan_report",
+                 "search_strings", "static_mapping"]:
         f = request.files.get(key)
         if f and f.filename:
             path = os.path.join(session_dir, f"{key}_{f.filename}")
             f.save(path)
             saved[key] = path
-
-    # Add bundled mapping files automatically
-    saved["search_strings"] = SEARCH_STRINGS_PATH
-    saved["static_mapping"] = STATIC_MAPPING_PATH
 
     sessions[session_id] = {
         "file_paths": saved,

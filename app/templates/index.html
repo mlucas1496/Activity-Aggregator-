@@ -13,7 +13,7 @@
     <!-- Header -->
     <header>
         <h1>Activity Stack &amp; Match</h1>
-        <div class="subtitle">v6.7 &middot; Python/Flask &middot; FX via Bank of Canada API &middot; Open output in Excel</div>
+        <div class="subtitle">v6.8 &middot; Python/Flask &middot; FX via Bank of Canada API &middot; Open output in Excel</div>
     </header>
 
     <!-- Body: two columns -->
@@ -58,16 +58,31 @@
                 <input type="file" accept=".csv" style="display:none">
             </div>
 
+            <div class="drop-zone" id="drop-search_strings" data-key="search_strings">
+                <div class="drop-info">
+                    <div class="drop-label">Search Strings (XLSX)</div>
+                    <div class="drop-filename"></div>
+                </div>
+                <div class="drop-icon">+</div>
+                <input type="file" accept=".xlsx,.xls" style="display:none">
+            </div>
+
+            <div class="drop-zone" id="drop-static_mapping" data-key="static_mapping">
+                <div class="drop-info">
+                    <div class="drop-label">Static Mapping (XLSX)</div>
+                    <div class="drop-filename"></div>
+                </div>
+                <div class="drop-icon">+</div>
+                <input type="file" accept=".xlsx,.xls" style="display:none">
+            </div>
+
             <!-- Instructions -->
             <div class="instructions">
                 <strong>Instructions:</strong><br>
-                1. Upload all 4 files above<br>
+                1. Upload all 6 files above<br>
                 2. Click "Run Pipeline" to process<br>
                 3. Download the output XLSX<br>
                 4. Open in Excel to review<br>
-                <span class="instructions-note">
-                    Static Mapping &amp; Search Strings are bundled in the app.
-                </span>
             </div>
 
             <!-- Run button -->
@@ -155,7 +170,7 @@
 
     <!-- Footer -->
     <footer>
-        &copy; Bullish 2026 &middot; Activity Stack &amp; Match v6.7 &middot; Python/Flask Build
+        &copy; Bullish 2026 &middot; Activity Stack &amp; Match v6.8 &middot; Python/Flask Build
     </footer>
 
     <script src="/static/js/app.js"></script>
